@@ -89,6 +89,13 @@ def loss_fun(y_pred, y_ground):
   v = torch.sum(v)
   return v
 
+def get_model(train_loader,e = 10):
+	model = cs21b025()
+	optimizer = optim.SGD(model.parameters(), lr=0.001, momentum=0.9)
+	criteria = loss_fun
+	train_network(train_loader, optimizer,criteria,e)
+	return model
+
 #write the get model
 def get_model_advanced(train_loader, n_epochs=10, lr=1e-4):
 	model = cs21b025()
