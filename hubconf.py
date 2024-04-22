@@ -93,7 +93,7 @@ def get_model(train_loader,e=10):
 	model = cs21b025()
 	optimizer = optim.SGD(model.parameters(), lr=0.001, momentum=0.9)
 	criteria = loss_fun
-	train_network(train_loader, optimizer,criteria,e)
+	train_network(train_loader, model, optimizer,criteria,e)
 	return model
 
 #write the get model
