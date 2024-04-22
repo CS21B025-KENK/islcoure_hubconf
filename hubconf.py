@@ -89,7 +89,7 @@ def loss_fun(y_pred, y_ground):
   v = torch.sum(v)
   return v
 
-def get_model(train_loader,e = 10):
+def get_model(train_loader,e=10):
 	model = cs21b025()
 	optimizer = optim.SGD(model.parameters(), lr=0.001, momentum=0.9)
 	criteria = loss_fun
