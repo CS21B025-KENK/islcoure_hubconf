@@ -8,6 +8,35 @@ import torch.nn.functional as F
 import torch.optim as optim
 import numpy as np
 from sklearn.metrics import classification_report, confusion_matrix, precision_score
+from torchmetrics import Precision, Recall, F1Score, Accuracy
+from torchmetrics.classification import accuracy
+
+def test(dataloader, model, loss_fn):
+    size = len(dataloader.dataset)
+    num_batches = len(dataloader)
+    model.eval()
+    test_loss, correct = 0, 0
+    with torch.no_grad():
+        for X, y in dataloader:
+            #X, y = X.to(device), y.to(device)
+            tmp = torch.nn.functional.one_hot(y, num_classes= 10)
+            pred = model(X)
+            test_loss += loss_fn(pred, tmp).item()
+            correct += (pred.argmax(1) == y).type(torch.float).sum().item()
+    test_loss /= num_batches
+    correct /= size
+    print(f"Test Error: \n Accuracy: {(100*correct):>0.1f}%, Avg loss: {test_loss:>8f} \n")
+    #precision_recall_fscore_support(y_ground, y_pred, average='macro')
+    accuracy1 = Accuracy(task='multiclass', num_classes = 10)
+    print('Accuracy :', accuracy1(pred,y))
+    precision = Precision(task = 'multiclass', average = 'macro', num_classes = 10)
+    print('precision :', precision(pred,y))
+
+    recall = Recall(task = 'multiclass', average = 'macro', num_classes = 10)
+    print('recall :', recall(pred,y))
+    f1_score = F1Score(task = 'multiclass', average = 'macro', num_classes = 10)
+    print('f1_score :', f1_score(pred,y))
+    return accuracy1,precision, recall, f1_score
 
 def load_data():
 
